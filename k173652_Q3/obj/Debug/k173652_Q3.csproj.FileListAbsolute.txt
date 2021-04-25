@@ -1,0 +1,7 @@
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\bin\Debug\k173652_Q3.exe.config
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\bin\Debug\k173652_Q3.exe
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\bin\Debug\k173652_Q3.pdb
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\obj\Debug\k173652_Q3.csprojAssemblyReference.cache
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\obj\Debug\k173652_Q3.csproj.CoreCompileInputs.cache
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\obj\Debug\k173652_Q3.exe
+C:\Users\noman\source\repos\K173652-Assignment-2\k173652_Q3\obj\Debug\k173652_Q3.pdb
