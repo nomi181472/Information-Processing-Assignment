@@ -1,5 +1,6 @@
 ﻿using k173652_Q1;
 using k173652_Q1_;
+using k173652_Q2;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -41,13 +42,13 @@ namespace k173652_Q4
     }
     class Program
     {
-        static public void XMLToJSON(string xmlDirectory, string jsonDirectory)
+        static public void XMLToJSON(string xmlDirectory, string jsonDirectory,string reportPath)
         {
 
-            
+
             foreach (var dir in GetSubDirectories(xmlDirectory))
             {
-                
+
                 foreach (var xmlSub in GetSubDirectories(dir))
                 {
 
@@ -61,11 +62,17 @@ namespace k173652_Q4
                     {
                         files = Directory.GetFiles(jsonDirectory, "*.json").ToArray();
                     }
-                    List<Scripts> listofscript = DeserializeXML(Directory.GetFiles(xmlSub, "*.xml")[0]);
+                    var xmlFiles = Directory.GetFiles(xmlSub, "*.xml")[0];
+                    List<Scripts> listofscript = DeserializeXML(xmlFiles);
                     foreach (var script in listofscript)
                     {
 
                         string p = PathBuilder(script, jsonSub);
+                        Handler.MyAction = () => SerilizeAndDeserilize(files, p, jsonSub, script);
+                        Handler.Handle("finally Freed", "", "Q4Fault.txt", 10000, 3, reportPath);
+                       
+
+                        /*                       
                         bool isNeedLock = true;
                         int i = 0;
                         while (isNeedLock)
@@ -73,7 +80,7 @@ namespace k173652_Q4
                             i++;
                             try
                             {
-                                
+
                                 if (!files.Contains(p))
                                 {
                                     Directory.CreateDirectory(jsonSub);
@@ -106,13 +113,14 @@ namespace k173652_Q4
                                             price = script.price,
                                             date = DateTime.Now.ToString()
                                         });
+                                    sn.scriptData.lastUpdatedOn = DateTime.Now.ToString();
                                     SerilizeIt(sn, p);
 
 
                                 }
                                 isNeedLock = false;
-                                var msg = new string[] {  "Finally Freed " + DateTime.Now.ToString() };
-                                File.AppendAllLines(@"D:\Assignment\q4Fault.txt", msg);
+                               // var msg = new string[] { "Finally Freed " + DateTime.Now.ToString() };
+                                //File.AppendAllLines(@"D:\Assignment\q4Success.txt", msg);
 
                             }
                             catch (IOException ioexceptip)
@@ -127,15 +135,60 @@ namespace k173652_Q4
                                 File.AppendAllLines(@"D:\Assignment\q4Fault.txt", msg);
                             }
                         }
-                        //SerilizeJson(script, files);
-                       
-                    }
 
+
+
+                    */
+                        }
+                        
+                    File.Delete(xmlFiles);
+                    Directory.Delete(xmlSub);
+
+                        
+                }
+                Directory.Delete(dir);
+            }
+            void SerilizeAndDeserilize(string[] files,string p,string jsonSub,Scripts script)
+            {
+                if (!files.Contains(p))
+                {
+                    Directory.CreateDirectory(jsonSub);
+                    ScriptName sd = new ScriptName();
+                    sd.scriptData = new ScriptData()
+                    {
+                        lastUpdatedOn = DateTime.Now.ToString(),
+                        data = new List<Data>() {
+                                   new Data()
+                                {
+                                     price = script.price,
+                                date = DateTime.Now.ToString()
+                                }
+                                }
+                    };
+
+
+
+                    SerilizeIt(sd, p);
+                }
+                else
+                {
+
+
+                    ScriptName sn = DeserilizeIt(p);
+
+                    sn.scriptData.data.Add(
+                        new Data()
+                        {
+                            price = script.price,
+                            date = DateTime.Now.ToString()
+                        });
+                    sn.scriptData.lastUpdatedOn = DateTime.Now.ToString();
+                    SerilizeIt(sn, p);
 
 
                 }
             }
-
+            
             string PathBuilder(Scripts scr, string jsSub)
             {
                 return jsSub + @"\" + scr.script.Replace(' ', '-').Replace('.', '-') + ".json";
@@ -158,6 +211,7 @@ namespace k173652_Q4
                 XmlSerializer serializer = new XmlSerializer(typeof(List<Scripts>));
                 StreamReader reader = new StreamReader(path);
                 list = (List<Scripts>)serializer.Deserialize(reader);
+
                 reader.Close();
                 return list;
             }
@@ -171,12 +225,12 @@ namespace k173652_Q4
         static void Main(string[] args)
         {
 
-           // XMLToJSON(ConfigurationManager.AppSettings["xmlDirectory"], ConfigurationManager.AppSettings["jsonDirectory"]);
-            ProcessGenerator.waitTime = Convert.ToInt32(ConfigurationManager.AppSettings["setTimeInMinutes"]);
-            ProcessGenerator.MyAction = () => XMLToJSON(ConfigurationManager.AppSettings["xmlDirectory"], ConfigurationManager.AppSettings["jsonDirectory"]);//
-            Environment.ExitCode = WindowService.RunWindowsService("Q4 Data XML TO Json", "Q4 Data XML TO Json", "Q4 Data XML TO Json " + ProcessGenerator.waitTime + " min", "Q4");
+           // XMLToJSON(ConfigurationManager.AppSettings["xmlDirectory"], ConfigurationManager.AppSettings["jsonDirectory"],ConfigurationManager.AppSettings["ReportPath"]);
+           ProcessGenerator.waitTime = Convert.ToInt32(ConfigurationManager.AppSettings["setTimeInMinutes"]);
+            ProcessGenerator.MyAction = () => XMLToJSON(ConfigurationManager.AppSettings["xmlDirectory"], ConfigurationManager.AppSettings["jsonDirectory"], ConfigurationManager.AppSettings["ReportPath"]);//
+           Environment.ExitCode = WindowService.RunWindowsService("Q4 Data XML TO Json", "Q4 Data XML TO Json", "Q4 Data XML TO Json " + ProcessGenerator.waitTime + " min", "Q4");
 
-
+            
         }
     }
 }

@@ -52,5 +52,15 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\k173652_Q1\k173652_Q1.csproj">
+      <Project>{6ce0e86c-3f8d-4c34-b61e-317ca3a70c50}</Project>
+      <Name>k173652_Q1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\k173652_Q2\k173652_Q2.csproj">
+      <Project>{3AD5D2F8-49A6-463F-8BD1-A7F38B146D0D}</Project>
+      <Name>k173652_Q2</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -32,15 +33,16 @@ namespace k173652_Q1_
             {
                 MyAction();
                 var msg =new string[] { "Question: " + question + " Time: " + DateTime.Now.ToString() };
-                File.AppendAllLines(@"D:\Assignment\Success.txt",msg);
+                File.AppendAllLines(@"D:\Assignment\SuccessReport.txt", msg);
             }
             catch(Exception Ex)
             {
                 var msg= new string[] { "Question: " + question + " Reason: " + Ex.Message + " Time: " + DateTime.Now.ToString() };
-                File.AppendAllLines(@"D:\Assignment\Fault.txt", msg);
+                File.AppendAllLines(@"D:\Assignment\ExceptionReport.txt", msg);
             }
 
         }
+        
         public void Start(string question)
         {
             this.question = question;
